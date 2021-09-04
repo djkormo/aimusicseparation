@@ -1,4 +1,4 @@
-Project which helps separate audio tracks.
+Project which helps to separate audio tracks.
 
 Based on:
 
