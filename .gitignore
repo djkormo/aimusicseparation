@@ -3,4 +3,4 @@ __pycache__
 *.jpg
 rembg/
 demo/
-u2net_models
+checkpoints
