@@ -123,7 +123,7 @@ Vue.component('train', {
     <div class="demo-card-square mdl-card mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title mdl-card--expand">
             <!--<h2 class="mdl-card__title-text">AI Scissors</h2>-->
-            <img src="/static/logo.png" width="270px" />
+            <img src="/static/logo.png" width="170px" class="center"/>
         </div>
         <!--<div class="mdl-card__supporting-text">
             Upload image file.
