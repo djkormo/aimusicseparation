@@ -38,10 +38,12 @@ async def create_file(file: bytes = File(...)):
 
 
 @router.post("/api/music/{file_name}")
-async def create_upload_file(file_name, file: UploadFile = File(...)):
+async def create_upload_file(file_name, file: UploadFile = File(...), music_service: MusicService = Injects(MusicService)):
     print(file)
     print(file_name)
     print(file.filename)
     file_data=await file.read()
-    file_processed=remove(file_data)
-    return StreamingResponse(io.BytesIO(file_processed), media_type="image/png")
+    file_processed=music_service.process(file_data)
+    #with open('/tmp/tmp_fbc6ony.zip','rb') as f:
+    #    file_processed=f.read()
+    return StreamingResponse(io.BytesIO(file_processed), media_type="application/x-zip-compressed")

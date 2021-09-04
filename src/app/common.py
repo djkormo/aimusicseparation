@@ -2,7 +2,7 @@ import qdi
 from typing import Any, Callable, Optional, Sequence
 from functools import lru_cache, partial
 from fastapi import Depends
-from services.music import MusicService, Storage
+from services.music import MusicService
 
 class Bootstapper:
 
@@ -12,7 +12,6 @@ class Bootstapper:
         c.register_instance(qdi.IFactory, qdi.Factory(c))
 
         # services
-        c.register_singleton(Storage)
         c.register_singleton(MusicService)
 
 #        c.register_singleton(Camera)

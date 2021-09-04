@@ -15,29 +15,39 @@ Vue.component("dropzone",{
   },
   mounted(){
     this.uploadDropzone= new Dropzone(this.$el, {
-        url:"/api/scissors/"+this.modelName, 
+        url:"/api/music/"+this.modelName, 
         paramName: "file",
         method: "post",
         timeout: 36000000,
         responseType: 'arraybuffer',
         success: function(file, response){
-            console.log(file)
             var imageBlob = response;
-            var imageBytes = btoa(
-              new Uint8Array(response)
-                .reduce((data, byte) => data + String.fromCharCode(byte), '')
-            );
-
-                var outputImg = document.getElementById('output');
-                outputImg.src = 'data:image/png;base64,'+imageBytes;
-
-                var inputImg = document.getElementById('input');
-                inputImg.src = file.dataURL;
-
-                //var blob = new Blob(new Uint8Array(response), {type: "image/png"});
-                //saveAs(blob, 'out.png');
+            console.log(response);
+            console.log(file);
 
 
+            var processTrack = function(zip, name){
+                zip.files[name+".mp3"].async("base64").then(function (data64) {
+                    document.getElementById(name).src='data:audio/mp3;base64,'+data64
+                });
+            };
+
+            var new_zip = new JSZip();
+            new_zip.loadAsync(response)
+                .then(function(zip) {
+                    processTrack(zip,"bass");
+                    processTrack(zip,"drums");
+                    processTrack(zip,"other");
+                    processTrack(zip,"vocals");
+                });
+
+
+            file.arrayBuffer().then(function(res){ 
+                data64 = btoa(
+                    new Uint8Array(res).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                );
+                document.getElementById('original').src = 'data:audio/mp3;base64,'+data64
+            });
         }
     });
   }
@@ -122,9 +132,36 @@ Vue.component('train', {
 
         <div class="mdl-card__actions mdl-card--border">
             <dropzone :current-project="currentProject" ref="dropzone"></dropzone>
-            <br/>
-            <img id="input" width="49%" />
-            <img id="output" width="49%" />
+        <div class="mdl-grid">
+            <ul class="demo-list-icon mdl-list">
+                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content"><b>Original: &nbsp;</b>
+                    <audio controls id="original" /></span>
+                </li>
+            </ul>
+        </div>
+        <div class="mdl-grid">
+            <ul class="demo-list-icon mdl-list">
+                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content"><b>Bass: &nbsp;</b>
+                    <audio controls id="bass" /></span>
+                </li>
+                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content"><b>Drums: &nbsp;</b>
+                    <audio controls id="drums" /></span>
+                </li>
+            </ul>
+            <ul class="demo-list-icon mdl-list">
+                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content"><b>Other: &nbsp;</b>
+                    <audio controls id="other" /></span>
+                </li>
+                <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content"><b>Vocals: &nbsp;</b>
+                    <audio controls id="vocals" /></span>
+                </li>
+            </ul>
+        </div>
         </div>
     </div>
     </div>
